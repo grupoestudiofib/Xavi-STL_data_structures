@@ -42,3 +42,12 @@ int main(){
 		}
 	}
 }
+/*
+Adri:
+El set te elimina los valores repetidos, si te entran dos valores repes ya estas contaminando las estadisticas
+	idea 1: mirar antes de meter los elementos si estan repes con bool repe = s.find(elem) == s.end() y tenerlo en cuenta con tam y tot
+	idea 2: Yo probaria a usar priority_queue que creo que es la unica de entre set map y pq que permite repes
+	tal vez haciendo dos colas una pq normal y otra invertida para pillar los maximos y minimos no se
+	idea 3(la mas interesante para mi): hacerlo con un map<int,int> (k,v) en el que k sea el numero y v las veces que esta repe, y que al hacer delete se mire v
+	si es 0 a tomar fanta y si no se reduce (al añadir tambien tenerlo en cuanta si esta ya sumarle 1 a la v)
+*/
