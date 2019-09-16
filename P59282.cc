@@ -1,3 +1,5 @@
+//Los errores/dudas que tenía han sido solucionados, funciona y tiene semáforo verde :)
+
 #include <iostream>
 #include <map>
 using namespace std;
