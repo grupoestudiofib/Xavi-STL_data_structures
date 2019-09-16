@@ -1,53 +1,52 @@
-//AYUDA: Creo que el error está al eliminar en el delete o directamente en la estructura de datos que uso; el mayor problema/duda está en cómo añadir elementos repetidos sin que haya problemas del solapamiento y tal
-//Me da error al eliminar un numero que estaba repetido así que ahí mi duda pls help
-
 #include <iostream>
-#include <set>
+#include <map>
 using namespace std;
 
 int main(){
-	set<int> s;
+	cout.setf(ios::fixed);
+	cout.precision(4);
+
+	map<int,int> s;
+	//numero identificador y contador
 	string act;
 	double tot = 0;
 	int tam = 0;
-	auto it = s.begin();
 	//minimo en s.begin(); maximo en s.end() -1
 	while(cin >> act){
+		auto it = s.begin();
 		auto fin = s.end();
-		//puntero para el número máximo
 		if(act == "delete"){
-			if(s.size() == 0) cout << "no elements" << endl;
-			//si el set está vacío no hace nada
+			if(tam == 0) cout << "no elements" << endl;
+			//si el map está vacío no hace nada
 			else{
-				//delete elimina el minimo (s.begin()); disminuimos el tamaño y restamos el menor al total
+				//modificamos tamaño, total y el contador del menor, si ese menor queda vacío (it-second = 0) lo eliminamos
 				--tam;
-				tot-= *(s.begin());
-				it = s.erase(s.begin());
-				//eliminamos el menor
-				--fin;
-				//colocamos el puntero en s.end()-1 (maximo) e imprimimos
-				cout << "minimum: " << *(s.begin()) << ", maximum: " << *fin << ", average: " << tot/tam << endl;
+				it = s.begin();
+				tot-= (it->first);
+				--(it->second);
+				if((it->second) == 0) s.erase(it);
+				//si el tamaño es 0 no hace nada
+				if(tam == 0) cout << "no elements" << endl;
+				else{
+					//si al eliminar el menor no queda vacío colocamos el puntero en s.end()-1 (maximo) e imprimimos
+					--fin;
+					cout << "minimum: " << (s.begin())->first << ", maximum: " << fin->first << ", average: " << tot/tam << endl;
+				}
 			}
 		}
 		else if(act == "number"){
-			//aumentamos el tamaño en uno, añadimos n al total y lo insertamos
+			//aumentamos el tamaño en uno, añadimos n al total y lo buscamos
 			++tam;
 			int n;
 			cin >> n;
 			tot+=n;
-			it = s.insert(n).first;
+			it = s.find(n);
+			//si n no está lo añadimos, sino aumentamos el contador
+			if(it == s.end()) s.insert({n,1});
+			else ++(it->second);
 			//colocamos el puntero en s.end()-1 (maximo) e imprimimos
 			--fin;
-			cout << "minimum: " << *(s.begin()) << ", maximum: " << *fin << ", average: " << tot/tam << endl;
+			cout << "minimum: " << (s.begin())->first << ", maximum: " << fin->first << ", average: " << tot/tam << endl;
 		}
 	}
 }
-/*
-Adri:
-El set te elimina los valores repetidos, si te entran dos valores repes ya estas contaminando las estadisticas
-	idea 1: mirar antes de meter los elementos si estan repes con bool repe = s.find(elem) == s.end() y tenerlo en cuenta con tam y tot
-	idea 2: Yo probaria a usar priority_queue que creo que es la unica de entre set map y pq que permite repes
-	tal vez haciendo dos colas una pq normal y otra invertida para pillar los maximos y minimos no se
-	idea 3(la mas interesante para mi): hacerlo con un map<int,int> (k,v) en el que k sea el numero y v las veces que esta repe, y que al hacer delete se mire v
-	si es 0 a tomar fanta y si no se reduce (al añadir tambien tenerlo en cuanta si esta ya sumarle 1 a la v)
-*/
